@@ -1,0 +1,29 @@
+version: '2.0'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: my_postgres_db 
+    ports: 
+      - "5432:5432" 
+    environment: 
+      - POSTGRES_USER=postgres 
+      - POSTGRES_PASSWORD=mysecretpassword 
+      - POSTGRES_DB=mytodos 
+    volumes: 
+      - db_data:/var/lib/postgresql/data
+
+  web:
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
+    container_name: my_flask_app 
+    ports: 
+      - "8080:5000" 
+    depends_on: 
+      - db 
+    volumes: 
+      - ./app:/app 
+
+volumes: 
+  db_data:
